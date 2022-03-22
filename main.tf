@@ -27,7 +27,8 @@ resource "aws_vpc_ipv4_cidr_block_association" "main" {
 # Calculate Subnets
 #-------------------------------
 module "subnet_addrs" {
-  source = "hashicorp/subnets/cidr"
+  source  = "hashicorp/subnets/cidr"
+  version = "1.0.0"
 
   base_cidr_block = aws_vpc_ipv4_cidr_block_association.main.cidr_block
 
