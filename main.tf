@@ -13,6 +13,13 @@ data "aws_availability_zones" "main" {
   state = "available"
 }
 
+data "aws_subnets" "main" {
+  filter {
+    name   = "tag:Name"
+    values = var.subnets_spoke
+  }
+}
+
 #-------------------------------
 # Create Secondary CIDR
 #-------------------------------
@@ -21,7 +28,6 @@ resource "aws_vpc_ipv4_cidr_block_association" "main" {
   vpc_id     = data.aws_vpcs.main.ids[0]
   cidr_block = var.vpc_cidr
 }
-
 
 #-------------------------------
 # Calculate Subnets
@@ -62,4 +68,13 @@ resource "aws_subnet" "main" {
   tags = {
     Name = format("%s-%s", var.subnet_name, module.subnet_addrs.networks[count.index].name)
   }
+}
+
+#-------------------------------
+# Create Private NAT Gateway
+#-------------------------------
+resource "aws_nat_gateway" "main" {
+  count             = length(module.subnet_addrs.networks[*].cidr_block)
+  connectivity_type = "private"
+  subnet_id         = data.aws_subnets.main.ids[count.index]
 }

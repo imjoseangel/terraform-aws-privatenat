@@ -21,3 +21,9 @@ variable "subnet_name" {
   type        = string
   default     = null
 }
+
+variable "subnets_spoke" {
+  description = "The name of the subnet to use"
+  type        = list(string)
+  default     = []
+}
