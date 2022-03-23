@@ -18,19 +18,16 @@ variable "vpc_cidr" {
 variable "subnet_nat_name" {
   description = "The name of the nat subnet to use"
   type        = string
-  default     = null
 }
 
 variable "subnets_spoke" {
   description = "The name of the spoke subnet"
   type        = list(string)
-  default     = []
 }
 
 variable "subnet_external_name" {
   description = "The name of the external subnet to use"
   type        = string
-  default     = null
 }
 
 variable "subnet_external_cidr" {
