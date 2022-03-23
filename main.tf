@@ -95,7 +95,7 @@ resource "aws_internet_gateway" "main" {
 # Create NAT Gateways
 #-------------------------------
 resource "aws_nat_gateway" "main" {
-  count             = length(module.subnet_addrs.networks[*].cidr_block)
+  count             = length(aws_subnet.main)
   connectivity_type = "private"
   subnet_id         = data.aws_subnets.main.ids[count.index]
   tags = {
@@ -116,7 +116,7 @@ resource "aws_eip" "main" {
 }
 
 resource "aws_nat_gateway" "external" {
-  count             = length(var.subnet_gw_cidr)
+  count             = length(aws_subnet.external)
   connectivity_type = "public"
   allocation_id     = aws_eip.main[count.index].id
   subnet_id         = aws_subnet.external[count.index].id
