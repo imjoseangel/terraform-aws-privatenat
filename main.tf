@@ -64,14 +64,14 @@ resource "aws_subnet" "main" {
 }
 
 resource "aws_subnet" "external" {
-  count                   = length(var.subnet_external_cidr)
+  count                   = length(var.subnet_gw_cidr)
   vpc_id                  = data.aws_vpcs.main.ids[0]
-  cidr_block              = var.subnet_external_cidr[count.index]
+  cidr_block              = var.subnet_gw_cidr[count.index]
   availability_zone       = data.aws_availability_zones.main.names[count.index]
   map_public_ip_on_launch = true
 
   tags = {
-    Name = format("%s-%s", var.subnet_external_name, var.subnet_external_cidr[count.index])
+    Name = format("%s-%s", var.subnet_gw_name, var.subnet_gw_cidr[count.index])
   }
 }
 
