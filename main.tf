@@ -74,6 +74,10 @@ resource "aws_subnet" "external" {
   tags = {
     Name = format("%s-%s", var.subnet_gw_name, data.aws_availability_zones.main.names[count.index])
   }
+
+  depends_on = [
+    aws_internet_gateway.main
+  ]
 }
 
 #-------------------------------
@@ -97,4 +101,16 @@ resource "aws_nat_gateway" "main" {
   tags = {
     Name = format("%s-%s", var.private_nat_name, data.aws_availability_zones.main.names[count.index])
   }
+}
+
+resource "aws_eip" "main" {
+  vpc = true
+  depends_on = [
+    aws_internet_gateway.main
+  ]
+}
+
+resource "aws_nat_gateway" "external" {
+  count     = length(var.subnet_gw_cidr)
+  subnet_id = aws_subnet.external[count.index].id
 }
