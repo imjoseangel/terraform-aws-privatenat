@@ -59,3 +59,9 @@ variable "nateip_name" {
   type        = string
   default     = "default-nateip"
 }
+
+variable "route_name" {
+  description = "The name of the route to use"
+  type        = string
+  default     = "default-route"
+}
