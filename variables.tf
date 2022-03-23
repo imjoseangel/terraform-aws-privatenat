@@ -41,3 +41,9 @@ variable "igw_name" {
   type        = string
   default     = "default-igw"
 }
+
+variable "private_nat_name" {
+  description = "The name of the private nat to use"
+  type        = string
+  default     = "default-nat"
+}

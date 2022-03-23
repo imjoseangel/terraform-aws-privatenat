@@ -95,6 +95,6 @@ resource "aws_nat_gateway" "main" {
   connectivity_type = "private"
   subnet_id         = data.aws_subnets.main.ids[count.index]
   tags = {
-    Name = var.private_nat_name
+    Name = format("%s-%s", var.private_nat_name, data.aws_availability_zones.main.names[count.index])
   }
 }
