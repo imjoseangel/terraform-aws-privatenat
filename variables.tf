@@ -21,7 +21,7 @@ variable "subnet_nat_name" {
 }
 
 variable "subnets_spoke" {
-  description = "The name of the spoke subnet"
+  description = "The names of the spoke subnets"
   type        = list(string)
 }
 
