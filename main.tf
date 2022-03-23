@@ -111,7 +111,7 @@ resource "aws_eip" "main" {
   ]
 
   tags = {
-    Name = format("%s-%s", var.nateip_name, data.aws_availability_zones.main.names[count.index])
+    Name = format("%s-%02d", var.nateip_name, count.index)
   }
 }
 
@@ -124,4 +124,8 @@ resource "aws_nat_gateway" "external" {
   depends_on = [
     aws_internet_gateway.main, aws_eip.main
   ]
+
+  tags = {
+    Name = format("%s-%s", var.public_nat_name, data.aws_availability_zones.main.names[count.index])
+  }
 }
