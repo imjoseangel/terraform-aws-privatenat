@@ -147,10 +147,14 @@ resource "aws_route_table" "main" {
     nat_gateway_id = aws_nat_gateway.main[count.index].id
   }
 
-
   route {
     cidr_block     = "192.168.0.0/16"
     nat_gateway_id = aws_nat_gateway.main[count.index].id
+  }
+
+  route {
+    cidr_block     = "0.0.0.0/0"
+    nat_gateway_id = aws_nat_gateway.external[count.index].id
   }
 
   tags = {
