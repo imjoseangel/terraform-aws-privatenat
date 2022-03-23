@@ -129,3 +129,20 @@ resource "aws_nat_gateway" "external" {
     Name = format("%s-%s", var.public_nat_name, data.aws_availability_zones.main.names[count.index])
   }
 }
+
+#-------------------------------
+# Create Routes
+#-------------------------------
+
+resource "aws_route_table" "main" {
+  count  = length(aws_subnet.main)
+  vpc_id = data.aws_vpcs.main.ids[0]
+  route {
+    cidr_block     = "10.0.0.0/8"
+    nat_gateway_id = aws_nat_gateway.main[count.index].id
+  }
+
+  tags = {
+    Name = "example"
+  }
+}
