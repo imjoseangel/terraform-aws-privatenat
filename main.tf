@@ -104,16 +104,21 @@ resource "aws_nat_gateway" "main" {
 }
 
 resource "aws_eip" "main" {
-  vpc = true
+  count = length(var.subnet_gw_cidr)
+  vpc   = true
   depends_on = [
     aws_internet_gateway.main
   ]
+
+  tags = {
+    Name = format("%s-%s", var.nateip_name, data.aws_availability_zones.main.names[count.index])
+  }
 }
 
 resource "aws_nat_gateway" "external" {
   count             = length(var.subnet_gw_cidr)
   connectivity_type = "public"
-  allocation_id     = aws_eip.main.id
+  allocation_id     = aws_eip.main[count.index].id
   subnet_id         = aws_subnet.external[count.index].id
 
   depends_on = [

@@ -47,3 +47,9 @@ variable "private_nat_name" {
   type        = string
   default     = "default-nat"
 }
+
+variable "nateip_name" {
+  description = "The name of the NAT Elastic IP to use"
+  type        = string
+  default     = "default-nateip"
+}
