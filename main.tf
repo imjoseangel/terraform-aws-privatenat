@@ -157,3 +157,9 @@ resource "aws_route_table" "main" {
     Name = format("%s-%s", var.route_name, data.aws_availability_zones.main.names[count.index])
   }
 }
+
+resource "aws_route_table_association" "main" {
+  count          = length(aws_subnet.main)
+  subnet_id      = aws_subnet.main[count.index].id
+  route_table_id = aws_route_table.main[count.index].id
+}
