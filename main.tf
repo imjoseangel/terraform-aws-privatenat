@@ -72,7 +72,7 @@ resource "aws_subnet" "external" {
   map_public_ip_on_launch = true
 
   tags = {
-    Name = format("%s-%s", var.subnet_gw_name, var.subnet_gw_cidr[count.index])
+    Name = format("%s-%s", var.subnet_gw_name, data.aws_availability_zones.main.names[count.index])
   }
 }
 
@@ -94,4 +94,7 @@ resource "aws_nat_gateway" "main" {
   count             = length(module.subnet_addrs.networks[*].cidr_block)
   connectivity_type = "private"
   subnet_id         = data.aws_subnets.main.ids[count.index]
+  tags = {
+    Name = var.private_nat_name
+  }
 }
