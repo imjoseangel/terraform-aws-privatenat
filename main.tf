@@ -15,7 +15,7 @@ data "aws_availability_zones" "main" {
 data "aws_subnets" "main" {
   filter {
     name   = "tag:Name"
-    values = var.subnets_spoke
+    values = var.subnets_spoke_names
   }
 }
 
