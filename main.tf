@@ -50,10 +50,6 @@ module "subnet_addrs" {
   ]
 }
 
-output "output" {
-  value = module.subnet_addrs.networks[*].cidr_block
-}
-
 #-------------------------------
 # Create Subnets
 #-------------------------------
@@ -66,7 +62,19 @@ resource "aws_subnet" "main" {
   map_public_ip_on_launch = false
 
   tags = {
-    Name = format("%s-%s", var.subnet_name, module.subnet_addrs.networks[count.index].name)
+    Name = format("%s-%s", var.subnet_nat_name, module.subnet_addrs.networks[count.index].name)
+  }
+}
+
+resource "aws_subnet" "external" {
+  count                   = length(var.subnet_external_cidr)
+  vpc_id                  = data.aws_vpcs.main.ids[0]
+  cidr_block              = var.subnet_external_cidr[count.index]
+  availability_zone       = data.aws_availability_zones.main.names[count.index]
+  map_public_ip_on_launch = true
+
+  tags = {
+    Name = format("%s-%s", var.subnet_external_name, var.subnet_external_cidr[count.index])
   }
 }
 

@@ -16,14 +16,26 @@ variable "vpc_cidr" {
   default     = "100.64.0.0/16"
 }
 
-variable "subnet_name" {
-  description = "The name of the subnet to use"
+variable "subnet_nat_name" {
+  description = "The name of the nat subnet to use"
   type        = string
   default     = null
 }
 
 variable "subnets_spoke" {
-  description = "The name of the subnet to use"
+  description = "The name of the spoke subnet"
   type        = list(string)
   default     = []
+}
+
+variable "subnet_external_name" {
+  description = "The name of the external subnet to use"
+  type        = string
+  default     = null
+}
+
+variable "subnet_external_cidr" {
+  description = "The CIDR block to use for the external subnet"
+  type        = list(string)
+  default     = ["100.100.100.0/25", "100.100.100.128/25"]
 }
