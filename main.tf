@@ -158,7 +158,7 @@ resource "aws_route_table" "main" {
   }
 
   tags = {
-    Name = format("%s-%s", var.route_name, data.aws_availability_zones.main.names[count.index])
+    Name = format("%s-%s", var.nat_route_name, data.aws_availability_zones.main.names[count.index])
   }
 }
 
@@ -166,4 +166,24 @@ resource "aws_route_table_association" "main" {
   count          = length(aws_subnet.main)
   subnet_id      = aws_subnet.main[count.index].id
   route_table_id = aws_route_table.main[count.index].id
+}
+
+resource "aws_route_table" "external" {
+  count  = length(aws_subnet.external)
+  vpc_id = data.aws_vpcs.main.ids[0]
+
+  route {
+    cidr_block = "0.0.0.0/0"
+    gateway_id = aws_internet_gateway.main.id
+  }
+
+  tags = {
+    Name = format("%s-%s", var.igw_route_name, data.aws_availability_zones.main.names[count.index])
+  }
+}
+
+resource "aws_route_table_association" "external" {
+  count          = length(aws_subnet.external)
+  subnet_id      = aws_subnet.external[count.index].id
+  route_table_id = aws_route_table.external[count.index].id
 }

@@ -60,8 +60,14 @@ variable "nateip_name" {
   default     = "default-nateip"
 }
 
-variable "route_name" {
-  description = "The name of the route to use"
+variable "nat_route_name" {
+  description = "The name of the NAT routes"
   type        = string
-  default     = "default-route"
+  default     = "default-natroute"
+}
+
+variable "igw_route_name" {
+  description = "The name of the NAT routes"
+  type        = string
+  default     = "default-igwroute"
 }
