@@ -35,3 +35,9 @@ variable "subnet_gw_cidr" {
   type        = list(string)
   default     = ["100.100.100.0/25", "100.100.100.128/25"]
 }
+
+variable "igw_name" {
+  description = "The name of the internet gateway to use"
+  type        = string
+  default     = "default-igw"
+}

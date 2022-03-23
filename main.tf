@@ -82,7 +82,7 @@ resource "aws_internet_gateway" "main" {
   vpc_id = data.aws_vpcs.main.ids[0]
 
   tags = {
-    Name = "main"
+    Name = var.igw_name
   }
 }
 
