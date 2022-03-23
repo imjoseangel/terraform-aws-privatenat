@@ -1,7 +1,6 @@
 #-------------------------------
 # Read VPC
 #-------------------------------
-
 data "aws_vpcs" "main" {
   filter {
     name   = "tag:Name"
@@ -23,7 +22,6 @@ data "aws_subnets" "main" {
 #-------------------------------
 # Create Secondary CIDR
 #-------------------------------
-
 resource "aws_vpc_ipv4_cidr_block_association" "main" {
   vpc_id     = data.aws_vpcs.main.ids[0]
   cidr_block = var.vpc_cidr
@@ -53,7 +51,6 @@ module "subnet_addrs" {
 #-------------------------------
 # Create Subnets
 #-------------------------------
-
 resource "aws_subnet" "main" {
   count                   = length(module.subnet_addrs.networks[*].cidr_block)
   vpc_id                  = data.aws_vpcs.main.ids[0]
@@ -79,7 +76,18 @@ resource "aws_subnet" "external" {
 }
 
 #-------------------------------
-# Create Private NAT Gateway
+# Create Internet Gateways
+#-------------------------------
+resource "aws_internet_gateway" "main" {
+  vpc_id = data.aws_vpcs.main.ids[0]
+
+  tags = {
+    Name = "main"
+  }
+}
+
+#-------------------------------
+# Create NAT Gateways
 #-------------------------------
 resource "aws_nat_gateway" "main" {
   count             = length(module.subnet_addrs.networks[*].cidr_block)
