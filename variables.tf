@@ -25,12 +25,12 @@ variable "subnets_spoke" {
   type        = list(string)
 }
 
-variable "subnet_external_name" {
+variable "subnet_gw_name" {
   description = "The name of the external subnet to use"
   type        = string
 }
 
-variable "subnet_external_cidr" {
+variable "subnet_gw_cidr" {
   description = "The CIDR block to use for the external subnet"
   type        = list(string)
   default     = ["100.100.100.0/25", "100.100.100.128/25"]
