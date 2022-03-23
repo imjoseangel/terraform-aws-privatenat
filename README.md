@@ -14,7 +14,7 @@ This Terraform module deploys a Private NAT in Amazon Web Services.
 
 ```terraform
 module "privatenat" {
-  source   = "github.com/imjoseangel/terraform-aws-privatenat
+  source   = "github.com/imjoseangel/terraform-aws-privatenat"
 }
 ```
 
