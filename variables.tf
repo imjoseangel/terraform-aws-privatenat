@@ -9,10 +9,10 @@ variable "region" {
   default     = "eu-west-1"
 }
 
-variable "vpc_cidr" {
+variable "vpc_cidrs" {
   description = "The CIDR block to use for the VPC"
-  type        = string
-  default     = "100.64.0.0/16"
+  type        = list(string)
+  default     = ["100.64.0.0/16", "100.100.100.0/24"]
 }
 
 variable "subnet_nat_name" {

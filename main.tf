@@ -23,8 +23,9 @@ data "aws_subnets" "main" {
 # Create Secondary CIDR
 #-------------------------------
 resource "aws_vpc_ipv4_cidr_block_association" "main" {
+  count      = length(var.vpc_cidrs)
   vpc_id     = data.aws_vpcs.main.ids[0]
-  cidr_block = var.vpc_cidr
+  cidr_block = var.vpc_cidrs[count.index]
 }
 
 #-------------------------------
@@ -34,7 +35,7 @@ module "subnet_addrs" {
   source  = "hashicorp/subnets/cidr"
   version = "1.0.0"
 
-  base_cidr_block = aws_vpc_ipv4_cidr_block_association.main.cidr_block
+  base_cidr_block = aws_vpc_ipv4_cidr_block_association.main[0].cidr_block
 
   networks = [
     {
