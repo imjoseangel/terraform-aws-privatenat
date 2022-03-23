@@ -111,7 +111,7 @@ resource "aws_eip" "main" {
   ]
 
   tags = {
-    Name = format("%s-%02d", var.nateip_name, count.index)
+    Name = format("%s-%02d", var.nateip_name, count.index + 1)
   }
 }
 
