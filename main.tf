@@ -111,6 +111,12 @@ resource "aws_eip" "main" {
 }
 
 resource "aws_nat_gateway" "external" {
-  count     = length(var.subnet_gw_cidr)
-  subnet_id = aws_subnet.external[count.index].id
+  count             = length(var.subnet_gw_cidr)
+  connectivity_type = "public"
+  allocation_id     = aws_eip.main.id
+  subnet_id         = aws_subnet.external[count.index].id
+
+  depends_on = [
+    aws_internet_gateway.main, aws_eip.main
+  ]
 }
