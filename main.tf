@@ -200,3 +200,24 @@ resource "aws_vpc" "isolated" {
     Name = var.vpc_isolated_name
   }
 }
+
+#-------------------------------
+# Calculate Isolated Subnets
+#-------------------------------
+module "subnet_addrs_isolated" {
+  source  = "hashicorp/subnets/cidr"
+  version = "1.0.0"
+
+  base_cidr_block = var.isolated_vpc_cidrs
+
+  networks = [
+    {
+      name     = data.aws_availability_zones.main.names[0]
+      new_bits = 9
+    },
+    {
+      name     = data.aws_availability_zones.main.names[1]
+      new_bits = 9
+    }
+  ]
+}
