@@ -10,9 +10,20 @@ variable "region" {
 }
 
 variable "vpc_cidrs" {
-  description = "The CIDR block to use for the VPC"
+  description = "The CIDR block to use for the Main VPC"
   type        = list(string)
   default     = ["100.64.0.0/16", "100.100.100.0/24"]
+}
+
+variable "isolated_vpc_cidrs" {
+  description = "The CIDR block to use for the Isolated VPC"
+  type        = string
+  default     = "100.65.0.0/24"
+}
+
+variable "vpc_isolated_name" {
+  description = "The name of the isolated vpc to use"
+  type        = string
 }
 
 variable "subnet_nat_name" {

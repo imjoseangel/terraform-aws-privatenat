@@ -24,6 +24,7 @@ module "privatenat" {
   nateip_name         = "my-nateip"
   nat_route_name      = "my-nat-route"
   igw_route_name      = "my-igw-route"
+  vpc_isolated_name   = "my-vpc-isolated"
 }
 ```
 

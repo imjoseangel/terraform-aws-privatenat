@@ -187,3 +187,16 @@ resource "aws_route_table_association" "external" {
   subnet_id      = aws_subnet.external[count.index].id
   route_table_id = aws_route_table.external[count.index].id
 }
+
+#-------------------------------
+# Isolated VPC
+#-------------------------------
+
+resource "aws_vpc" "isolated" {
+  cidr_block           = var.isolated_vpc_cidrs
+  enable_dns_hostnames = true
+
+  tags = {
+    Name = var.vpc_isolated_name
+  }
+}
