@@ -213,11 +213,15 @@ module "subnet_addrs_isolated" {
   networks = [
     {
       name     = data.aws_availability_zones.main.names[0]
-      new_bits = 9
+      new_bits = 8
     },
     {
       name     = data.aws_availability_zones.main.names[1]
-      new_bits = 9
+      new_bits = 8
     }
   ]
+}
+
+output "xx" {
+  value = module.subnet_addrs_isolated
 }
