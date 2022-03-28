@@ -148,6 +148,11 @@ resource "aws_route_table" "main" {
   }
 
   route {
+    cidr_block     = "100.65.0.0/16"
+    nat_gateway_id = aws_ec2_transit_gateway_vpc_attachment.main.id
+  }
+
+  route {
     cidr_block     = "192.168.0.0/16"
     nat_gateway_id = aws_nat_gateway.main[count.index].id
   }
@@ -175,6 +180,11 @@ resource "aws_route_table" "external" {
   route {
     cidr_block = "0.0.0.0/0"
     gateway_id = aws_internet_gateway.main.id
+  }
+
+  route {
+    cidr_block     = "100.65.0.0/16"
+    nat_gateway_id = aws_ec2_transit_gateway_vpc_attachment.main.id
   }
 
   tags = {
