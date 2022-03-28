@@ -243,9 +243,15 @@ resource "aws_subnet" "isolated" {
 
 resource "aws_ec2_transit_gateway" "main" {
 
-  description = "Transit gateway for Isolated-Spoke VPC"
+  description                    = "Transit gateway for Isolated-Spoke VPC"
   auto_accept_shared_attachments = "enable"
   tags = {
     Name = var.transit_gateway_name
   }
+}
+
+resource "aws_ec2_transit_gateway_vpc_attachment" "main" {
+  transit_gateway_id = aws_ec2_transit_gateway.main.id
+  vpc_id             = data.aws_vpcs.main.ids[0]
+  subnet_ids         = [aws_subnet.main[*].id]
 }
