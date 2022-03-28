@@ -225,7 +225,7 @@ module "subnet_addrs_isolated" {
 #-------------------------------
 # Create Isolated Subnets
 #-------------------------------
-resource "aws_subnet" "main" {
+resource "aws_subnet" "isolated" {
   count                   = length(module.subnet_addrs_isolated.networks[*].cidr_block)
   vpc_id                  = aws_vpcs.isolated.id
   cidr_block              = module.subnet_addrs_isolated.networks[count.index].cidr_block
