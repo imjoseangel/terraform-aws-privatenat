@@ -227,7 +227,7 @@ module "subnet_addrs_isolated" {
 #-------------------------------
 resource "aws_subnet" "isolated" {
   count                   = length(module.subnet_addrs_isolated.networks[*].cidr_block)
-  vpc_id                  = aws_vpcs.isolated.id
+  vpc_id                  = aws_vpc.isolated.id
   cidr_block              = module.subnet_addrs_isolated.networks[count.index].cidr_block
   availability_zone       = data.aws_availability_zones.main.names[count.index]
   map_public_ip_on_launch = false
