@@ -193,7 +193,7 @@ resource "aws_route_table_association" "external" {
 #-------------------------------
 
 resource "aws_vpc" "isolated" {
-  cidr_block           = var.isolated_vpc_cidrs
+  cidr_block           = var.isolated_vpc_cidr
   enable_dns_hostnames = true
 
   tags = {
@@ -208,7 +208,7 @@ module "subnet_addrs_isolated" {
   source  = "hashicorp/subnets/cidr"
   version = "1.0.0"
 
-  base_cidr_block = var.isolated_vpc_cidrs
+  base_cidr_block = var.isolated_vpc_cidr
 
   networks = [
     {
@@ -234,5 +234,17 @@ resource "aws_subnet" "isolated" {
 
   tags = {
     Name = format("%s-%s", var.subnet_isolated_name, module.subnet_addrs_isolated.networks[count.index].name)
+  }
+}
+
+#-------------------------------
+# Create Transit Gateway
+#-------------------------------
+
+resource "aws_ec2_transit_gateway" "main" {
+
+  auto_accept_shared_attachments = "enable"
+  tags = {
+    Name = var.transit_gateway_name
   }
 }

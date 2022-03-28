@@ -15,7 +15,7 @@ variable "vpc_cidrs" {
   default     = ["100.64.0.0/16", "100.100.100.0/24"]
 }
 
-variable "isolated_vpc_cidrs" {
+variable "isolated_vpc_cidr" {
   description = "The CIDR block to use for the Isolated VPC"
   type        = string
   default     = "100.65.0.0/24"
@@ -56,6 +56,11 @@ variable "igw_name" {
   description = "The name of the internet gateway to use"
   type        = string
   default     = "default-igw"
+}
+
+variable "transit_gateway_name" {
+  description = "The name of the Transit gateway to use"
+  type        = string
 }
 
 variable "private_nat_name" {
