@@ -243,6 +243,7 @@ resource "aws_subnet" "isolated" {
 
 resource "aws_ec2_transit_gateway" "main" {
 
+  description = "Transit gateway for Isolated-Spoke VPC"
   auto_accept_shared_attachments = "enable"
   tags = {
     Name = var.transit_gateway_name
