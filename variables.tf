@@ -31,6 +31,11 @@ variable "subnet_nat_name" {
   type        = string
 }
 
+variable "subnet_isolated_name" {
+  description = "The name of the first isolated subnet to use"
+  type        = string
+}
+
 variable "subnets_spoke_names" {
   description = "The names of the spoke subnets"
   type        = list(string)
