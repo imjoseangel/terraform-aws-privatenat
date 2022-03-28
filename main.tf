@@ -222,6 +222,17 @@ module "subnet_addrs_isolated" {
   ]
 }
 
-output "xx" {
-  value = module.subnet_addrs_isolated
+#-------------------------------
+# Create Isolated Subnets
+#-------------------------------
+resource "aws_subnet" "main" {
+  count                   = length(module.subnet_addrs_isolated.networks[*].cidr_block)
+  vpc_id                  = aws_vpcs.isolated.id
+  cidr_block              = module.subnet_addrs_isolated.networks[count.index].cidr_block
+  availability_zone       = data.aws_availability_zones.main.names[count.index]
+  map_public_ip_on_launch = false
+
+  tags = {
+    Name = format("%s-%s", var.subnet_isolated_name, module.subnet_addrs_isolated.networks[count.index].name)
+  }
 }
