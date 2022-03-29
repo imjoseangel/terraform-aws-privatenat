@@ -277,3 +277,9 @@ resource "aws_ec2_transit_gateway_vpc_attachment" "isolated" {
     Name = format("%s-tgw-attachment", var.vpc_isolated_name)
   }
 }
+
+resource "aws_ec2_transit_gateway_route" "main" {
+  destination_cidr_block         = "0.0.0.0/0"
+  transit_gateway_attachment_id  = aws_ec2_transit_gateway_vpc_attachment.main.id
+  transit_gateway_route_table_id = aws_ec2_transit_gateway_vpc_attachment.main.association_default_route_table_id
+}
