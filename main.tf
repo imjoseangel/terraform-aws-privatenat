@@ -289,7 +289,6 @@ resource "aws_ec2_transit_gateway_route" "main" {
 #-------------------------------
 
 resource "aws_route_table" "isolated" {
-  count  = length(aws_subnet.isolated)
   vpc_id = aws_vpc.isolated.id
 
   route {
@@ -298,12 +297,11 @@ resource "aws_route_table" "isolated" {
   }
 
   tags = {
-    Name = format("%sroute-%s", var.subnet_isolated_name, data.aws_availability_zones.main.names[count.index])
+    Name = var.subnet_isolated_name
   }
 }
 
 resource "aws_route_table_association" "isolated" {
-  count          = length(aws_subnet.isolated)
-  subnet_id      = aws_subnet.isolated[count.index].id
-  route_table_id = aws_route_table.isolated[count.index].id
+  subnet_id      = aws_subnet.isolated.id
+  route_table_id = aws_route_table.isolated.id
 }
