@@ -14,17 +14,23 @@ This Terraform module deploys a Private NAT in Amazon Web Services.
 
 ```terraform
 module "privatenat" {
-  source              = "github.com/imjoseangel/terraform-aws-privatenat"
-  vpc_name            = ["my-vpc"]
-  subnet_nat_name     = "my-subnet-nat"
-  subnet_gw_name      = "my-subnet-gw"
-  subnets_spoke_names = ["spoke-eu-west-1a", "spoke-eu-west-1b"]
-  igw_name            = "my-igw"
-  private_nat_name    = "my-private-nat"
-  nateip_name         = "my-nateip"
-  nat_route_name      = "my-nat-route"
-  igw_route_name      = "my-igw-route"
-  vpc_isolated_name   = "my-vpc-isolated"
+  source               = "github.com/imjoseangel/terraform-aws-privatenat"
+  vpc_name             = ["my-vpc"]
+  subnet_nat_name      = "my-subnet-nat"
+  subnet_gw_name       = "my-subnet-gw"
+  subnets_spoke_names  = ["spoke-eu-west-1a", "spoke-eu-west-1b"]
+  igw_name             = "my-igw"
+  private_nat_name     = "my-private-nat"
+  nateip_name          = "my-nateip"
+  vpc_isolated_name    = "my-vpc-isolated"
+  subnet_isolated_name = "my-subnet-isolated"
+  transit_gateway_name = "my-transit-gateway"
+}
+
+data "aws_route" "main" {
+  route_table_id         = aws_route_table.main.id
+  destination_cidr_block = "100.65.0.0/16"
+  transit_gateway_id     = aws_transit_gateway.main.id
 }
 ```
 
