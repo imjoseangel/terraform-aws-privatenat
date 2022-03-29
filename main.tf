@@ -163,7 +163,7 @@ resource "aws_route_table" "main" {
   }
 
   tags = {
-    Name = format("%s-%s", var.nat_route_name, data.aws_availability_zones.main.names[count.index])
+    Name = format("%sroute-%s", var.subnet_nat_name, data.aws_availability_zones.main.names[count.index])
   }
 }
 
@@ -188,7 +188,7 @@ resource "aws_route_table" "external" {
   }
 
   tags = {
-    Name = format("%s-%s", var.igw_route_name, data.aws_availability_zones.main.names[count.index])
+    Name = format("%sroute-%s", var.igw_name, data.aws_availability_zones.main.names[count.index])
   }
 }
 
@@ -282,4 +282,28 @@ resource "aws_ec2_transit_gateway_route" "main" {
   destination_cidr_block         = "0.0.0.0/0"
   transit_gateway_attachment_id  = aws_ec2_transit_gateway_vpc_attachment.main.id
   transit_gateway_route_table_id = aws_ec2_transit_gateway.main.association_default_route_table_id
+}
+
+#-------------------------------
+# Create Isolated Routes
+#-------------------------------
+
+resource "aws_route_table" "isolated" {
+  count  = length(aws_subnet.isolated)
+  vpc_id = data.aws_vpc.isolated.id
+
+  route {
+    cidr_block         = "0.0.0.0/0"
+    transit_gateway_id = aws_ec2_transit_gateway.main.id
+  }
+
+  tags = {
+    Name = format("%sroute-%s", var.subnet_isolated_name, data.aws_availability_zones.main.names[count.index])
+  }
+}
+
+resource "aws_route_table_association" "external" {
+  count          = length(aws_subnet.external)
+  subnet_id      = aws_subnet.external[count.index].id
+  route_table_id = aws_route_table.external[count.index].id
 }

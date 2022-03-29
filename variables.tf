@@ -80,15 +80,3 @@ variable "nateip_name" {
   type        = string
   default     = "default-nateip"
 }
-
-variable "nat_route_name" {
-  description = "The name of the NAT routes"
-  type        = string
-  default     = "default-natroute"
-}
-
-variable "igw_route_name" {
-  description = "The name of the NAT routes"
-  type        = string
-  default     = "default-igwroute"
-}
