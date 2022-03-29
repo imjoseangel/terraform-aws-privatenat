@@ -265,6 +265,6 @@ resource "aws_ec2_transit_gateway_vpc_attachment" "main" {
   vpc_id             = data.aws_vpcs.main.ids[0]
   subnet_ids         = aws_subnet.main[*].id
   tags = {
-    Name = var.main_vpctgw_attachment_name
+    Name = format("%s-tgw-attachment", var.vpc_name[0])
   }
 }

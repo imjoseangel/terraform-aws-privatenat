@@ -92,9 +92,3 @@ variable "igw_route_name" {
   type        = string
   default     = "default-igwroute"
 }
-
-variable "main_vpctgw_attachment_name" {
-  description = "The name of the main VPC Transit Gateway Attachment"
-  type        = string
-  default     = "default-main-vpc-tgw-attachment"
-}
