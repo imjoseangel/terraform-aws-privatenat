@@ -290,7 +290,7 @@ resource "aws_ec2_transit_gateway_route" "main" {
 
 resource "aws_route_table" "isolated" {
   count  = length(aws_subnet.isolated)
-  vpc_id = data.aws_vpc.isolated.id
+  vpc_id = aws_vpc.isolated.id
 
   route {
     cidr_block         = "0.0.0.0/0"
