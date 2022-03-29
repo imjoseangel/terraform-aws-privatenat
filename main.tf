@@ -268,3 +268,12 @@ resource "aws_ec2_transit_gateway_vpc_attachment" "main" {
     Name = format("%s-tgw-attachment", var.vpc_name[0])
   }
 }
+
+resource "aws_ec2_transit_gateway_vpc_attachment" "isolated" {
+  transit_gateway_id = aws_ec2_transit_gateway.main.id
+  vpc_id             = aws_vpc.isolated.id
+  subnet_ids         = aws_subnet.isolated[*].id
+  tags = {
+    Name = format("%s-tgw-attachment", var.vpc_isolated_name)
+  }
+}
