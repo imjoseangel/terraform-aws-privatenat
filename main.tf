@@ -302,8 +302,8 @@ resource "aws_route_table" "isolated" {
   }
 }
 
-# resource "aws_route_table_association" "external" {
-#   count          = length(aws_subnet.external)
-#   subnet_id      = aws_subnet.external[count.index].id
-#   route_table_id = aws_route_table.external[count.index].id
-# }
+resource "aws_route_table_association" "isolated" {
+  count          = length(aws_subnet.isolated)
+  subnet_id      = aws_subnet.isolated[count.index].id
+  route_table_id = aws_route_table.isolated[count.index].id
+}
