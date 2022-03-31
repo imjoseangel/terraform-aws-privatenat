@@ -147,10 +147,10 @@ resource "aws_route_table" "main" {
     nat_gateway_id = aws_nat_gateway.main[count.index].id
   }
 
-  route {
-    cidr_block         = "100.65.0.0/16"
-    transit_gateway_id = aws_ec2_transit_gateway.main.id
-  }
+  # route {
+  #   cidr_block         = "100.65.0.0/16"
+  #   transit_gateway_id = aws_ec2_transit_gateway.main.id
+  # }
 
   route {
     cidr_block     = "192.168.0.0/16"
@@ -182,10 +182,10 @@ resource "aws_route_table" "external" {
     gateway_id = aws_internet_gateway.main.id
   }
 
-  route {
-    cidr_block         = "100.65.0.0/16"
-    transit_gateway_id = aws_ec2_transit_gateway.main.id
-  }
+  # route {
+  #   cidr_block         = "100.65.0.0/16"
+  #   transit_gateway_id = aws_ec2_transit_gateway.main.id
+  # }
 
   tags = {
     Name = format("%sroute-%s", var.igw_name, data.aws_availability_zones.main.names[count.index])
@@ -198,111 +198,111 @@ resource "aws_route_table_association" "external" {
   route_table_id = aws_route_table.external[count.index].id
 }
 
-#-------------------------------
-# Isolated VPC
-#-------------------------------
+# #-------------------------------
+# # Isolated VPC
+# #-------------------------------
 
-resource "aws_vpc" "isolated" {
-  cidr_block           = var.isolated_vpc_cidr
-  enable_dns_hostnames = true
+# resource "aws_vpc" "isolated" {
+#   cidr_block           = var.isolated_vpc_cidr
+#   enable_dns_hostnames = true
 
-  tags = {
-    Name = var.vpc_isolated_name
-  }
-}
+#   tags = {
+#     Name = var.vpc_isolated_name
+#   }
+# }
 
-#-------------------------------
-# Calculate Isolated Subnets
-#-------------------------------
-module "subnet_addrs_isolated" {
-  source  = "hashicorp/subnets/cidr"
-  version = "1.0.0"
+# #-------------------------------
+# # Calculate Isolated Subnets
+# #-------------------------------
+# module "subnet_addrs_isolated" {
+#   source  = "hashicorp/subnets/cidr"
+#   version = "1.0.0"
 
-  base_cidr_block = var.isolated_vpc_cidr
+#   base_cidr_block = var.isolated_vpc_cidr
 
-  networks = [
-    {
-      name     = data.aws_availability_zones.main.names[0]
-      new_bits = 1
-    },
-    {
-      name     = data.aws_availability_zones.main.names[1]
-      new_bits = 1
-    }
-  ]
-}
+#   networks = [
+#     {
+#       name     = data.aws_availability_zones.main.names[0]
+#       new_bits = 1
+#     },
+#     {
+#       name     = data.aws_availability_zones.main.names[1]
+#       new_bits = 1
+#     }
+#   ]
+# }
 
-#-------------------------------
-# Create Isolated Subnets
-#-------------------------------
-resource "aws_subnet" "isolated" {
-  count                   = length(module.subnet_addrs_isolated.networks[*].cidr_block)
-  vpc_id                  = aws_vpc.isolated.id
-  cidr_block              = module.subnet_addrs_isolated.networks[count.index].cidr_block
-  availability_zone       = data.aws_availability_zones.main.names[count.index]
-  map_public_ip_on_launch = false
+# #-------------------------------
+# # Create Isolated Subnets
+# #-------------------------------
+# resource "aws_subnet" "isolated" {
+#   count                   = length(module.subnet_addrs_isolated.networks[*].cidr_block)
+#   vpc_id                  = aws_vpc.isolated.id
+#   cidr_block              = module.subnet_addrs_isolated.networks[count.index].cidr_block
+#   availability_zone       = data.aws_availability_zones.main.names[count.index]
+#   map_public_ip_on_launch = false
 
-  tags = {
-    Name = format("%s-%s", var.subnet_isolated_name, module.subnet_addrs_isolated.networks[count.index].name)
-  }
-}
+#   tags = {
+#     Name = format("%s-%s", var.subnet_isolated_name, module.subnet_addrs_isolated.networks[count.index].name)
+#   }
+# }
 
-#-------------------------------
-# Create Transit Gateway
-#-------------------------------
+# #-------------------------------
+# # Create Transit Gateway
+# #-------------------------------
 
-resource "aws_ec2_transit_gateway" "main" {
+# resource "aws_ec2_transit_gateway" "main" {
 
-  description                    = "Transit gateway for Isolated-Spoke VPC"
-  auto_accept_shared_attachments = "enable"
-  tags = {
-    Name = var.transit_gateway_name
-  }
-}
+#   description                    = "Transit gateway for Isolated-Spoke VPC"
+#   auto_accept_shared_attachments = "enable"
+#   tags = {
+#     Name = var.transit_gateway_name
+#   }
+# }
 
-resource "aws_ec2_transit_gateway_vpc_attachment" "main" {
-  transit_gateway_id = aws_ec2_transit_gateway.main.id
-  vpc_id             = data.aws_vpcs.main.ids[0]
-  subnet_ids         = aws_subnet.main[*].id
-  tags = {
-    Name = format("%s-tgw-attachment", var.vpc_name[0])
-  }
-}
+# resource "aws_ec2_transit_gateway_vpc_attachment" "main" {
+#   transit_gateway_id = aws_ec2_transit_gateway.main.id
+#   vpc_id             = data.aws_vpcs.main.ids[0]
+#   subnet_ids         = aws_subnet.main[*].id
+#   tags = {
+#     Name = format("%s-tgw-attachment", var.vpc_name[0])
+#   }
+# }
 
-resource "aws_ec2_transit_gateway_vpc_attachment" "isolated" {
-  transit_gateway_id = aws_ec2_transit_gateway.main.id
-  vpc_id             = aws_vpc.isolated.id
-  subnet_ids         = aws_subnet.isolated[*].id
-  tags = {
-    Name = format("%s-tgw-attachment", var.vpc_isolated_name)
-  }
-}
+# resource "aws_ec2_transit_gateway_vpc_attachment" "isolated" {
+#   transit_gateway_id = aws_ec2_transit_gateway.main.id
+#   vpc_id             = aws_vpc.isolated.id
+#   subnet_ids         = aws_subnet.isolated[*].id
+#   tags = {
+#     Name = format("%s-tgw-attachment", var.vpc_isolated_name)
+#   }
+# }
 
-resource "aws_ec2_transit_gateway_route" "main" {
-  destination_cidr_block         = "0.0.0.0/0"
-  transit_gateway_attachment_id  = aws_ec2_transit_gateway_vpc_attachment.main.id
-  transit_gateway_route_table_id = aws_ec2_transit_gateway.main.association_default_route_table_id
-}
+# resource "aws_ec2_transit_gateway_route" "main" {
+#   destination_cidr_block         = "0.0.0.0/0"
+#   transit_gateway_attachment_id  = aws_ec2_transit_gateway_vpc_attachment.main.id
+#   transit_gateway_route_table_id = aws_ec2_transit_gateway.main.association_default_route_table_id
+# }
 
-#-------------------------------
-# Create Isolated Routes
-#-------------------------------
+# #-------------------------------
+# # Create Isolated Routes
+# #-------------------------------
 
-resource "aws_route_table" "isolated" {
-  vpc_id = aws_vpc.isolated.id
+# resource "aws_route_table" "isolated" {
+#   vpc_id = aws_vpc.isolated.id
 
-  route {
-    cidr_block         = "0.0.0.0/0"
-    transit_gateway_id = aws_ec2_transit_gateway.main.id
-  }
+#   route {
+#     cidr_block         = "0.0.0.0/0"
+#     transit_gateway_id = aws_ec2_transit_gateway.main.id
+#   }
 
-  tags = {
-    Name = var.subnet_isolated_name
-  }
-}
+#   tags = {
+#     Name = var.subnet_isolated_name
+#   }
+# }
 
-resource "aws_route_table_association" "isolated" {
-  count          = length(aws_subnet.isolated)
-  subnet_id      = aws_subnet.isolated[count.index].id
-  route_table_id = aws_route_table.isolated.id
-}
+# resource "aws_route_table_association" "isolated" {
+#   count          = length(aws_subnet.isolated)
+#   subnet_id      = aws_subnet.isolated[count.index].id
+#   route_table_id = aws_route_table.isolated.id
+# }
