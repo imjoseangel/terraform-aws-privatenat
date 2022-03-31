@@ -15,26 +15,26 @@ variable "vpc_cidrs" {
   default     = ["100.64.0.0/16", "100.100.100.0/24"]
 }
 
-variable "isolated_vpc_cidr" {
-  description = "The CIDR block to use for the Isolated VPC"
-  type        = string
-  default     = "100.65.0.0/24"
-}
+# variable "isolated_vpc_cidr" {
+#   description = "The CIDR block to use for the Isolated VPC"
+#   type        = string
+#   default     = "100.65.0.0/24"
+# }
 
-variable "vpc_isolated_name" {
-  description = "The name of the isolated vpc to use"
-  type        = string
-}
+# variable "vpc_isolated_name" {
+#   description = "The name of the isolated vpc to use"
+#   type        = string
+# }
 
 variable "subnet_nat_name" {
   description = "The name of the nat subnet to use"
   type        = string
 }
 
-variable "subnet_isolated_name" {
-  description = "The name of the first isolated subnet to use"
-  type        = string
-}
+# variable "subnet_isolated_name" {
+#   description = "The name of the first isolated subnet to use"
+#   type        = string
+# }
 
 variable "subnets_spoke_names" {
   description = "The names of the spoke subnets"
@@ -58,10 +58,10 @@ variable "igw_name" {
   default     = "default-igw"
 }
 
-variable "transit_gateway_name" {
-  description = "The name of the Transit gateway to use"
-  type        = string
-}
+# variable "transit_gateway_name" {
+#   description = "The name of the Transit gateway to use"
+#   type        = string
+# }
 
 variable "private_nat_name" {
   description = "The name of the private nat to use"
