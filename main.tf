@@ -17,7 +17,7 @@ data "aws_subnets" "main" {
 #-------------------------------
 resource "aws_vpc_ipv4_cidr_block_association" "main" {
   count      = length(var.vpc_cidrs)
-  vpc_id     = data.aws_vpcs.main.ids[0]
+  vpc_id     = var.vpc_id
   cidr_block = var.vpc_cidrs[count.index]
 }
 
