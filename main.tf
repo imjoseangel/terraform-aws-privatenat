@@ -47,7 +47,7 @@ module "subnet_addrs" {
 #-------------------------------
 resource "aws_subnet" "main" {
   count                   = length(module.subnet_addrs.networks[*].cidr_block)
-  vpc_id                  = data.aws_vpcs.main.ids[0]
+  vpc_id                  = var.vpc_id
   cidr_block              = module.subnet_addrs.networks[count.index].cidr_block
   availability_zone       = data.aws_availability_zones.main.names[count.index]
   map_public_ip_on_launch = false
@@ -59,7 +59,7 @@ resource "aws_subnet" "main" {
 
 resource "aws_subnet" "external" {
   count                   = length(var.subnet_gw_cidr)
-  vpc_id                  = data.aws_vpcs.main.ids[0]
+  vpc_id                  = var.vpc_id
   cidr_block              = var.subnet_gw_cidr[count.index]
   availability_zone       = data.aws_availability_zones.main.names[count.index]
   map_public_ip_on_launch = true
@@ -77,7 +77,7 @@ resource "aws_subnet" "external" {
 # Create Internet Gateways
 #-------------------------------
 resource "aws_internet_gateway" "main" {
-  vpc_id = data.aws_vpcs.main.ids[0]
+  vpc_id = var.vpc_id
 
   tags = {
     Name = var.igw_name
@@ -129,7 +129,7 @@ resource "aws_nat_gateway" "external" {
 
 resource "aws_route_table" "main" {
   count  = length(aws_subnet.main)
-  vpc_id = data.aws_vpcs.main.ids[0]
+  vpc_id = var.vpc_id
   route {
     cidr_block     = "10.0.0.0/8"
     nat_gateway_id = aws_nat_gateway.main[count.index].id
@@ -168,7 +168,7 @@ resource "aws_route_table_association" "main" {
 
 resource "aws_route_table" "external" {
   count  = length(aws_subnet.external)
-  vpc_id = data.aws_vpcs.main.ids[0]
+  vpc_id = var.vpc_id
 
   route {
     cidr_block = "0.0.0.0/0"
@@ -255,7 +255,7 @@ resource "aws_route_table_association" "external" {
 
 # resource "aws_ec2_transit_gateway_vpc_attachment" "main" {
 #   transit_gateway_id = aws_ec2_transit_gateway.main.id
-#   vpc_id             = data.aws_vpcs.main.ids[0]
+#   vpc_id             = var.vpc_id
 #   subnet_ids         = aws_subnet.main[*].id
 #   tags = {
 #     Name = format("%s-tgw-attachment", var.vpc_name[0])
