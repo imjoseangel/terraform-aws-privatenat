@@ -1,6 +1,6 @@
-variable "vpc_name" {
-  description = "The name of the VPC to use"
-  type        = list(string)
+variable "vpc_id" {
+  description = "The ID of the VPC to use"
+  type        = string
 }
 
 variable "region" {

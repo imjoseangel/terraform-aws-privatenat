@@ -1,13 +1,6 @@
 #-------------------------------
 # Read VPC
 #-------------------------------
-data "aws_vpcs" "main" {
-  filter {
-    name   = "tag:Name"
-    values = var.vpc_name
-  }
-}
-
 data "aws_availability_zones" "main" {
   state = "available"
 }
