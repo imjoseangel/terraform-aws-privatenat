@@ -1,12 +1,6 @@
-variable "vpc_id" {
-  description = "The ID of the VPC to use"
-  type        = string
-}
-
 variable "region" {
   description = "The region to use"
   type        = string
-  default     = "eu-west-1"
 }
 
 variable "vpc_cidrs" {
