@@ -9,6 +9,13 @@ data "aws_vpc" "main" {
   id    = tolist(data.aws_vpcs.main.ids)[count.index]
 }
 
+data "aws_subnets" "main" {
+  filter {
+    name   = "tag:Name"
+    values = var.subnets_spoke_names
+  }
+}
+
 data "aws_availability_zones" "main" {
   state = "available"
 }
@@ -91,7 +98,7 @@ resource "aws_internet_gateway" "main" {
 resource "aws_nat_gateway" "main" {
   count             = length(aws_subnet.main)
   connectivity_type = "private"
-  subnet_id         = var.subnets_spoke_ids[count.index]
+  subnet_id         = data.aws_subnets.main.ids[count.index]
   tags = {
     Name = format("%s-%s", var.private_nat_name, data.aws_availability_zones.main.names[count.index])
   }
