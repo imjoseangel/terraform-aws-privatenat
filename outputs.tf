@@ -7,5 +7,5 @@ output "availability_zones" {
 }
 
 output "route_table_id" {
-  value = aws_route_table.main.id
+  value = aws_route_table.main[0].id
 }
