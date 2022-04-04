@@ -6,6 +6,6 @@ output "availability_zones" {
   value = data.aws_availability_zones.main.names
 }
 
-output "route_table_ids" {
+output "route_table_id" {
   value = aws_route_table.main.id
 }
