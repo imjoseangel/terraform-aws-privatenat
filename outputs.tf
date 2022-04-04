@@ -7,5 +7,5 @@ output "availability_zones" {
 }
 
 output "route_table_ids" {
-  value = data.aws_route_tables.main.ids
+  value = data.aws_route_table.main.ids
 }
