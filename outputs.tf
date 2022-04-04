@@ -5,3 +5,7 @@ output "vpc_id" {
 output "availability_zones" {
   value = data.aws_availability_zones.main.names
 }
+
+output "route_table_ids" {
+  value = data.aws_route_tables.main.ids
+}
