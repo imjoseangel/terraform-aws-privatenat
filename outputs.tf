@@ -1,4 +1,4 @@
-output "vpc" {
+output "vpc_id" {
   value = data.aws_vpcs.main.ids[0]
 }
 
