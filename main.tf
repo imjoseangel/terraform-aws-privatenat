@@ -159,7 +159,7 @@ resource "aws_route_table" "main" {
   }
 
   dynamic "route" {
-    for_each = aws_nat_gateway.external == null ? 0 : length(aws_nat_gateway.external)
+    for_each = length(var.subnet_gw_cidr) == 0 ? [] : [true]
     content {
       cidr_block     = "0.0.0.0/0"
       nat_gateway_id = aws_nat_gateway.external[count.index].id
