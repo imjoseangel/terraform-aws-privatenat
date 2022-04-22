@@ -41,7 +41,7 @@ variable "subnet_gw_name" {
 }
 
 variable "subnet_gw_cidr" {
-  description = "The CIDR block to use for the external subnet"
+  description = "The CIDR block to use for the external subnet. Empty for no external subnet"
   type        = list(string)
   default     = ["100.100.100.0/25", "100.100.100.128/25"]
 }
