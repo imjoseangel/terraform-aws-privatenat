@@ -85,8 +85,8 @@ resource "aws_subnet" "external" {
 # Create Internet Gateways
 #-------------------------------
 resource "aws_internet_gateway" "main" {
-  count  = length(aws_subnet.external)
-  vpc_id = data.aws_vpc.main[0].id
+  for_each = length(var.subnet_gw_cidr) == 0 ? 0 : 1
+  vpc_id   = data.aws_vpc.main[0].id
 
   tags = {
     Name = var.igw_name
