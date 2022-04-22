@@ -38,6 +38,7 @@ variable "subnets_spoke_names" {
 variable "subnet_gw_name" {
   description = "The name of the external subnet to use"
   type        = string
+  default     = null
 }
 
 variable "subnet_gw_cidr" {
