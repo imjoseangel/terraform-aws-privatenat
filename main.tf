@@ -191,9 +191,12 @@ resource "aws_route_table" "external" {
   count  = length(aws_subnet.external)
   vpc_id = data.aws_vpc.main[0].id
 
-  route {
-    cidr_block = "0.0.0.0/0"
-    gateway_id = aws_internet_gateway.main.id
+  dynamic "route" {
+    for_each = length(var.subnet_gw_cidr) == 0 ? [] : [true]
+    content {
+      cidr_block     = "0.0.0.0/0"
+      nat_gateway_id = aws_internet_gateway.main[each.key].id
+    }
   }
 
   # route {
