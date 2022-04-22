@@ -85,8 +85,8 @@ resource "aws_subnet" "external" {
 # Create Internet Gateways
 #-------------------------------
 resource "aws_internet_gateway" "main" {
-  for_each = length(var.subnet_gw_cidr) == 0 ? 0 : 1
-  vpc_id   = data.aws_vpc.main[0].id
+  count  = length(var.subnet_gw_cidr) == 0 ? 0 : 1
+  vpc_id = data.aws_vpc.main[0].id
 
   tags = {
     Name = var.igw_name
@@ -195,7 +195,7 @@ resource "aws_route_table" "external" {
     for_each = length(var.subnet_gw_cidr) == 0 ? [] : [true]
     content {
       cidr_block     = "0.0.0.0/0"
-      nat_gateway_id = aws_internet_gateway.main[each.key].id
+      nat_gateway_id = aws_internet_gateway.main[count.index].id
     }
   }
 
