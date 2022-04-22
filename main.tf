@@ -158,9 +158,12 @@ resource "aws_route_table" "main" {
     nat_gateway_id = aws_nat_gateway.main[count.index].id
   }
 
-  route {
-    cidr_block     = "0.0.0.0/0"
-    nat_gateway_id = aws_nat_gateway.external[count.index].id
+  dynamic "route" {
+    for_each = (aws_nat_gateway.external[count.index].id != null) ? [true] : []
+    content {
+      cidr_block     = "0.0.0.0/0"
+      nat_gateway_id = aws_nat_gateway.external[count.index].id
+    }
   }
 
   tags = {
