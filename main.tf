@@ -107,7 +107,7 @@ resource "aws_nat_gateway" "main" {
 
 resource "aws_eip" "main" {
   count = length(var.subnet_gw_cidr)
-  vpc   = true
+  domain = "vpc"
   depends_on = [
     aws_internet_gateway.main
   ]
